@@ -8,12 +8,13 @@ import {
   type LineData,
   type Time,
 } from "lightweight-charts";
-import useStore from "../../store/store";
-import { DraggablePriceLinePlugin } from "../../plugins/DraggablePriceLinePlugin";
+import useStore from "./store";
+import { DraggablePriceLinePlugin } from "./DraggablePriceLinePlugin";
 import ChartTableOverlay from "./ChartTableOverlay";
 import OrderPanel from "./OrderPanel";
 import type { OrderData } from "./OrderPanel";
-import { getPositionsByTradeId, updatePosition as updatePositionAPI } from "../../services/orderService";
+import { getPositionsByTradeId, updatePosition as updatePositionAPI } from "./orderService";
+import { chartSocketService } from "./chartSocketService";
 
 interface TradingViewChartProps {
   symbol: string;
@@ -45,6 +46,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const lastCandleDataRef = useRef<CandlestickData | null>(null);
   const [showOrderPanel] = useState(true);
   const draggablePluginsRef = useRef<Map<string, DraggablePriceLinePlugin>>(new Map());
+  const [isRealTimeConnected, setIsRealTimeConnected] = useState(false);
 
   const transformDataForChartType = (
     rawData: CandlestickData[]
@@ -290,6 +292,73 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     }
   }, [chartReady, optionValues, tradeId, chartType]);
 
+  useEffect(() => {
+    if (!chartReady || !tradeId) return;
+
+    const instances = useStore.getState().instances;
+    const instance = instances.find((i) => i.id === tradeId);
+
+    if (!instance) return;
+
+    chartSocketService.connect().then((connected) => {
+      setIsRealTimeConnected(connected);
+
+      if (connected) {
+        chartSocketService.subscribe(
+          {
+            instanceId: tradeId,
+            indexName: instance.indexName,
+            expiry: instance.expiry,
+            ltpRange: instance.ltpRange,
+          },
+          (candleData) => {
+            const series = candleSeriesRef.current || lineSeriesRef.current;
+            if (!series) return;
+
+            if (chartType === "candlestick" && candleSeriesRef.current) {
+              const candleTime = candleData.time as Time;
+
+              if (
+                !lastCandleDataRef.current ||
+                lastCandleDataRef.current.time !== candleTime
+              ) {
+                lastCandleDataRef.current = {
+                  time: candleTime,
+                  open: candleData.open,
+                  high: candleData.high,
+                  low: candleData.low,
+                  close: candleData.close,
+                };
+              } else {
+                lastCandleDataRef.current.high = Math.max(
+                  lastCandleDataRef.current.high,
+                  candleData.high
+                );
+                lastCandleDataRef.current.low = Math.min(
+                  lastCandleDataRef.current.low,
+                  candleData.low
+                );
+                lastCandleDataRef.current.close = candleData.close;
+              }
+
+              candleSeriesRef.current.update(lastCandleDataRef.current);
+            } else if (chartType === "line" && lineSeriesRef.current) {
+              lineSeriesRef.current.update({
+                time: candleData.time as Time,
+                value: candleData.close,
+              });
+            }
+          }
+        );
+      }
+    });
+
+    return () => {
+      chartSocketService.unsubscribe(tradeId);
+      setIsRealTimeConnected(false);
+    };
+  }, [chartReady, tradeId, chartType]);
+
   if (isLoading && !chartData.length) {
     return (
       <div className="flex items-center justify-center h-full text-gray-400">
@@ -334,6 +403,13 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
           <OrderPanel onPlaceOrder={handlePlaceOrder} tradeId={tradeId} />
         </div>
       )}
+
+      <div className="absolute top-4 right-4 z-10 flex items-center space-x-2 bg-gray-800/80 backdrop-blur-sm px-3 py-1.5 rounded-md border border-gray-700">
+        <div className={`w-2 h-2 rounded-full ${isRealTimeConnected ? 'bg-green-500 animate-pulse' : 'bg-gray-500'}`} />
+        <span className="text-xs text-gray-300">
+          {isRealTimeConnected ? 'Live' : 'Offline'}
+        </span>
+      </div>
     </div>
   );
 };

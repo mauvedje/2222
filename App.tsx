@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/dashboard";
-import NotFound from "./pages/notfound";
-import LoginPage from "./pages/login";
-import OnBoardingPage from "./pages/onBoarding";
+import Dashboard from "./dashboard";
+import NotFound from "./notfound";
+import LoginPage from "./Login";
+import OnBoardingPage from "./Onboarding";
 
 function App() {
   return (
