@@ -196,19 +196,24 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     draggablePluginsRef.current.clear();
 
     if (currentTradeInfo) {
+      const tradePositions = positions[tradeId] || [];
+
       const lineConfigs: Array<{
         type: 'entry' | 'stopLoss' | 'takeProfit';
         price: number | null;
         color: string;
-        label: string;
+        positionType: string;
       }> = [
-        { type: 'entry', price: currentTradeInfo.entry, color: '#0096FF', label: 'Entry' },
-        { type: 'stopLoss', price: currentTradeInfo.stopLoss, color: '#FF0000', label: 'Stop Loss' },
-        { type: 'takeProfit', price: currentTradeInfo.takeProfit, color: '#00FF00', label: 'Take Profit' },
+        { type: 'entry', price: currentTradeInfo.entry, color: '#0096FF', positionType: 'entry' },
+        { type: 'stopLoss', price: currentTradeInfo.stopLoss, color: '#FF0000', positionType: 'stop_loss' },
+        { type: 'takeProfit', price: currentTradeInfo.takeProfit, color: '#00FF00', positionType: 'take_profit' },
       ];
 
-      lineConfigs.forEach(({ type, price, color, label }) => {
+      lineConfigs.forEach(({ type, price, color, positionType }) => {
         if (price !== null && price > 0) {
+          const matchingPosition = tradePositions.find((p) => p.position_type === positionType);
+          const humanLabel = matchingPosition?.position_id || type;
+
           const plugin = new DraggablePriceLinePlugin(
             chartRef.current!,
             candleSeriesRef.current!,
@@ -216,20 +221,11 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
               price,
               color,
               lineWidth: 2,
-              label,
+              label: humanLabel,
               onPriceChange: (newPrice) => {
                 updateTradeInfoPrice(tradeId, type, newPrice);
               },
               onDragEnd: async (newPrice) => {
-                const tradePositions = positions[tradeId] || [];
-                const positionTypeMap = {
-                  entry: 'entry',
-                  stopLoss: 'stop_loss',
-                  takeProfit: 'take_profit',
-                };
-                const matchingPosition = tradePositions.find(
-                  (p) => p.position_type === positionTypeMap[type]
-                );
                 if (matchingPosition?.id) {
                   await updatePositionAPI(matchingPosition.id, { price: newPrice });
                   updatePositionStore(tradeId, matchingPosition.id, { price: newPrice });
