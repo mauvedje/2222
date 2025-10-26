@@ -1,0 +1,423 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+html,
+body {
+  font-family: var(--font-sans);
+  @apply bg-gray-900 text-white overflow-hidden;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 640px) {
+  .modal-content {
+    @apply mx-2;
+  }
+
+  .table-cell {
+    @apply p-1;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .modal-content {
+    @apply mx-4;
+  }
+}
+
+/* Sidebar hover functionality */
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.group:hover .group-hover\:w-64 {
+  width: 16rem;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-600;
+}
+
+/* Monospace numbers for financial data */
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Transition for hover states */
+.transition-colors {
+  @apply transition-all duration-200;
+}
+
+/* Responsive grid utilities */
+.responsive-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+}
+
+/* Responsive text utilities */
+.responsive-text {
+  @apply text-sm sm:text-base lg:text-lg;
+}
+
+/* Responsive padding utilities */
+.responsive-padding {
+  @apply p-2 sm:p-4 lg:p-6;
+}
+
+/* Responsive margin utilities */
+.responsive-margin {
+  @apply m-2 sm:m-4 lg:m-6;
+}
+
+/* Touch-friendly button sizes */
+.touch-button {
+  @apply min-h-[44px] min-w-[44px] p-2;
+}
+
+/* Responsive table */
+.responsive-table {
+  @apply text-xs sm:text-sm;
+}
+
+.responsive-table th,
+.responsive-table td {
+  @apply px-1 sm:px-2 lg:px-4 py-1 sm:py-2;
+}
+
+/* Responsive modal */
+.responsive-modal {
+  @apply w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl;
+}
+
+/* Responsive form inputs */
+.responsive-input {
+  @apply text-sm sm:text-base px-2 sm:px-3 py-1.5 sm:py-2;
+}
+
+/* Responsive card */
+.responsive-card {
+  @apply p-3 sm:p-4 lg:p-6 rounded-lg;
+}
+
+/* Responsive flex utilities */
+.responsive-flex {
+  @apply flex flex-col sm:flex-row;
+}
+
+.responsive-flex-reverse {
+  @apply flex flex-col-reverse sm:flex-row;
+}
+
+/* Responsive spacing */
+.responsive-space-x {
+  @apply space-x-2 sm:space-x-4 lg:space-x-6;
+}
+
+.responsive-space-y {
+  @apply space-y-2 sm:space-y-4 lg:space-y-6;
+}
+
+/* Responsive gap */
+.responsive-gap {
+  @apply gap-2 sm:gap-4 lg:gap-6;
+}
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom focus styles for better accessibility */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900;
+}
+
+/* Responsive container */
+.responsive-container {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Responsive grid columns */
+.responsive-cols-auto {
+  @apply grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5;
+}
+
+/* Responsive aspect ratio */
+.responsive-aspect {
+  @apply aspect-square sm:aspect-video;
+}
+
+/* Responsive max width */
+.responsive-max-w {
+  @apply max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl;
+}
+
+/* Responsive height */
+.responsive-height {
+  @apply h-32 sm:h-40 md:h-48 lg:h-56 xl:h-64;
+}
+
+/* Responsive width */
+.responsive-width {
+  @apply w-full sm:w-auto;
+}
+
+.chart-container-wrapper {
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+}
+
+.order-panel {
+  background: rgba(15, 20, 25, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 140px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(59, 130, 246, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.order-panel-header {
+  font-size: 8px;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.order-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.order-field label {
+  font-size: 7px;
+  color: #94a3b8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.order-input {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 4px;
+  padding: 3px 4px;
+  color: #e2e8f0;
+  font-size: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: var(--font-mono);
+}
+
+.order-input:focus {
+  border-color: rgba(59, 130, 246, 0.6);
+  background: rgba(30, 41, 59, 0.8);
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.1),
+    0 0 20px rgba(59, 130, 246, 0.15);
+}
+
+.order-input::placeholder {
+  color: #475569;
+}
+
+.place-button {
+  margin-top: 4px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: white;
+  font-size: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
+  box-shadow:
+    0 2px 6px rgba(16, 185, 129, 0.3),
+    0 0 0 1px rgba(16, 185, 129, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.place-button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 3px 10px rgba(16, 185, 129, 0.4),
+    0 0 0 1px rgba(16, 185, 129, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.place-button:active {
+  transform: translateY(0);
+  box-shadow:
+    0 1px 4px rgba(16, 185, 129, 0.3),
+    inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.price-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+  animation: lineGlow 2s ease-in-out infinite;
+}
+
+@keyframes lineGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px currentColor);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+}
+
+.price-line-red {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(239, 68, 68, 0.8) 10%,
+    rgba(239, 68, 68, 0.8) 90%,
+    transparent 100%
+  );
+  color: #ef4444;
+  box-shadow:
+    0 0 10px rgba(239, 68, 68, 0.6),
+    0 0 20px rgba(239, 68, 68, 0.3);
+}
+
+.price-line-blue {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(59, 130, 246, 0.8) 10%,
+    rgba(59, 130, 246, 0.8) 90%,
+    transparent 100%
+  );
+  color: #3b82f6;
+  box-shadow:
+    0 0 10px rgba(59, 130, 246, 0.6),
+    0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.price-line-green {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(16, 185, 129, 0.8) 10%,
+    rgba(16, 185, 129, 0.8) 90%,
+    transparent 100%
+  );
+  color: #10b981;
+  box-shadow:
+    0 0 10px rgba(16, 185, 129, 0.6),
+    0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.price-line-label {
+  position: absolute;
+  left: 300px;
+  background: rgba(15, 20, 25, 0.95);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  pointer-events: auto;
+  border: 1px solid currentColor;
+  box-shadow:
+    0 0 15px currentColor,
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.price-line-value {
+  position: absolute;
+  left: 400px;
+  background: rgba(15, 20, 25, 0.95);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  pointer-events: auto;
+  border: 1px solid currentColor;
+  box-shadow:
+    0 0 15px currentColor,
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.price-line-id-tag {
+  position: absolute;
+  right: 20px;
+  background: currentColor;
+  color: #0f1419;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  pointer-events: auto;
+  box-shadow:
+    0 0 20px currentColor,
+    0 4px 12px rgba(0, 0, 0, 0.4);
+  animation: tagPulse 2s ease-in-out infinite;
+}
+
+@keyframes tagPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
